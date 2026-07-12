@@ -13,7 +13,17 @@ def shuffle(s):
     """
     assert len(s) % 2 == 0, 'len(seq) must be even'
     "*** YOUR CODE HERE ***"
+    half = len(s) // 2
+    isFront = True
+    answer = []
+    for i in range(len(s)):
+        if isFront:
+            answer.append(s[i // 2])
+        else:
+            answer.append(s[half + i // 2])
+        isFront = not isFront
 
+    return answer
 
 def deep_map(f, s):
     """Replace all non-list elements x with f(x) in the nested list s.
@@ -38,6 +48,21 @@ def deep_map(f, s):
     True
     """
     "*** YOUR CODE HERE ***"
+    """
+    for item in s:
+        if type(item) == type([]):
+            deep_map(f, item)
+        else:
+            # item = f(item)
+            s[i] = f(item)
+    return
+    """
+    for i in range(len(s)):
+        if type(s[i]) == type([]):
+            deep_map(f, s[i])
+        else:
+            s[i] = f(s[i])
+    return
 
 
 HW_SOURCE_FILE=__file__
@@ -47,11 +72,13 @@ def planet(mass):
     """Construct a planet of some mass."""
     assert mass > 0
     "*** YOUR CODE HERE ***"
+    return ['planet', mass]
 
 def mass(p):
     """Select the mass of a planet."""
     assert is_planet(p), 'must call mass on a planet'
     "*** YOUR CODE HERE ***"
+    return p[1]
 
 def is_planet(p):
     """Whether p is a planet."""
@@ -104,6 +131,12 @@ def balanced(m):
     True
     """
     "*** YOUR CODE HERE ***"
+    if(is_mobile(m)):
+        return balanced(left(m)) and balanced(right(m)) and length(left(m))*total_mass(end(left(m))) == length(right(m))*total_mass(end(right(m)))
+    elif(is_arm(m)):
+        if(is_mobile(end(m))):
+            return balanced(end(m))
+        return True
 
 
 def berry_finder(t):
@@ -124,6 +157,16 @@ def berry_finder(t):
     True
     """
     "*** YOUR CODE HERE ***"
+    if(is_leaf(t)):
+        return label(t) == 'berry'
+    
+    answer = False
+    for item in branches(t):
+        if label(item) == 'berry' or answer:
+            return True
+        answer = answer or berry_finder(item)        
+
+    return answer
 
 
 HW_SOURCE_FILE=__file__
@@ -139,6 +182,18 @@ def max_path_sum(t):
     17
     """
     "*** YOUR CODE HERE ***"
+    def recursive_find(currentValue, currentTree):
+        if is_leaf(currentTree):
+            currentValue += label(currentTree)
+            return currentValue
+        else:
+            answer = float('-inf')
+            for item in branches(currentTree):
+                branchSum = recursive_find(currentValue, item)
+                answer = answer if answer > branchSum else branchSum
+            return answer + label(currentTree)
+
+    return recursive_find(0, t)
 
 
 def mobile(left, right):

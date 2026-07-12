@@ -27,6 +27,33 @@ def insert_items(s, before, after):
     True
     """
     "*** YOUR CODE HERE ***"
+    """
+    for i in range(len(s)):
+        if s[i] == before:
+            s.insert(i+1, after)
+    return s 
+    """
+    """
+    inputPosition = []
+    for i in range(len(s)):
+        if s[i] == before:
+           inputPosition.append(i)
+    """
+    inputPosition = [i for i in range(len(s)) if s[i] == before]
+
+    """
+    offset = 1
+    for pos in inputPosition:
+        s.insert(pos + offset, after)
+        offset += 1
+
+    return s
+    """
+    # reversed(inputPosition)
+   
+    for pos in reversed(inputPosition):  # is the reversed function only called once in for statement?
+        s.insert(pos + 1, after)
+    return s
 
 
 def group_by(s, fn):
@@ -39,6 +66,7 @@ def group_by(s, fn):
     >>> group_by(range(-3, 4), lambda x: x * x)
     {9: [-3, 3], 4: [-2, 2], 1: [-1, 1], 0: [0]}
     """
+    """
     grouped = {}
     for ____ in ____:
         key = ____
@@ -47,6 +75,18 @@ def group_by(s, fn):
         else:
             grouped[key] = ____
     return grouped
+    """
+    grouped = {}
+    for item in s:
+        key = fn(item)
+        if key in grouped:            
+            # grouped[key] = grouped[key].append(item)
+            grouped[key].append(item)
+        else:
+            # grouped[key] = list(item)
+            grouped[key] = [item]
+    return grouped
+
 
 
 def count_occurrences(t, n, x):
@@ -71,6 +111,19 @@ def count_occurrences(t, n, x):
     2
     """
     "*** YOUR CODE HERE ***"
+    count = 0
+    for _ in range(n):
+        # curValue = next(t)
+        # if curValue == StopIteration:
+        #     return count
+        # count += (curValue == x)
+        try:
+            curValue = next(t)
+        except StopIteration:
+            return count
+        count += (curValue == x) 
+    
+    return count
 
 
 def repeated(t, k):
@@ -94,6 +147,19 @@ def repeated(t, k):
     """
     assert k > 1
     "*** YOUR CODE HERE ***"
+    count = 0
+    value = float('-inf')
+    for item in t:
+        if value == item:
+            count += 1
+        else:
+            count = 1
+            value = item
+        
+        if count == k:
+            return value
+        
+    return -1
 
 
 def sprout_leaves(t, leaves):
@@ -130,6 +196,10 @@ def sprout_leaves(t, leaves):
           2
     """
     "*** YOUR CODE HERE ***"
+    if is_leaf(t):
+        return tree(label(t), [tree(b) for b in leaves])
+    
+    return tree(label(t), [sprout_leaves(b, leaves) for b in branches(t)]) 
 
 
 def partial_reverse(s, start):
@@ -145,6 +215,9 @@ def partial_reverse(s, start):
     [1, 2, 7, 6, 5, 3, 4]
     """
     "*** YOUR CODE HERE ***"
+    length = len(s)
+    for i in range((length - start) // 2):
+        s[start + i], s[length - 1 - i] = s[length - 1 - i], s[start + i]
 
 
 

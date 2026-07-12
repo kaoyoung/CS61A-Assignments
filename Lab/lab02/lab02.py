@@ -1,4 +1,3 @@
-
 def composite_identity(f, g):
     """
     Return a function with one parameter x that returns True if f(g(x)) is
@@ -14,6 +13,9 @@ def composite_identity(f, g):
     False
     """
     "*** YOUR CODE HERE ***"
+    def compute_result(x):
+        return g(f(x)) == f(g(x))
+    return compute_result
 
 
 def sum_digits(y):
@@ -60,6 +62,14 @@ def count_cond(condition):
     8
     """
     "*** YOUR CODE HERE ***"
+    def get_numbers(N):
+        answer = 0
+        for i in range(1, N+1):
+            # if(condition(i)):
+            if(condition(N, i)):
+                answer += 1
+        return answer
+    return get_numbers
 
 
 def multiple(a, b):
@@ -71,7 +81,12 @@ def multiple(a, b):
     42
     """
     "*** YOUR CODE HERE ***"
+    a_b_min = min(a,b)
+    a_b_gcd = a_b_min
+    while((a % a_b_gcd != 0) or (b % a_b_gcd != 0)):
+        a_b_gcd -= 1
 
+    return (a // a_b_gcd)*(b // a_b_gcd)*a_b_gcd
 
 
 def cycle(f1, f2, f3):
@@ -101,4 +116,16 @@ def cycle(f1, f2, f3):
     19
     """
     "*** YOUR CODE HERE ***"
-
+    def iterate_fnt(number):
+        def calculate(x):
+            answer = x
+            for i in range(number):
+                if(i % 3 == 0):
+                    answer = f1(answer)
+                elif(i % 3 == 1):
+                    answer = f2(answer)
+                else:
+                    answer = f3(answer)
+            return answer
+        return calculate
+    return iterate_fnt

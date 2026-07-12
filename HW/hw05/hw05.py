@@ -11,6 +11,16 @@ def hailstone(n):
     """
     "*** YOUR CODE HERE ***"
 
+    # This is a function not a class
+
+    while True:
+      yield n
+      if n != 1:
+        if n & 1:
+          n = 3*n + 1
+        else:
+          n //= 2
+      
 
 def merge(a, b):
     """
@@ -27,6 +37,8 @@ def merge(a, b):
     >>> [next(result) for _ in range(10)]
     [2, 3, 5, 7, 8, 9, 11, 13, 14, 15]
     """
+
+    """
     a_val, b_val = next(a), next(b)
     while True:
         if a_val == b_val:
@@ -35,6 +47,18 @@ def merge(a, b):
             "*** YOUR CODE HERE ***"
         else:
             "*** YOUR CODE HERE ***"
+    """
+    a_val, b_val = next(a), next(b)
+    while True:
+        if a_val == b_val:
+          yield a_val
+          a_val, b_val = next(a), next(b)
+        elif a_val < b_val:
+          yield a_val
+          a_val = next(a)
+        else:
+          yield b_val
+          b_val = next(b)
 
 
 def stair_ways(n):
@@ -51,6 +75,33 @@ def stair_ways(n):
     []
     """
     "*** YOUR CODE HERE ***"
+    """
+    solution = []
+    def recursive_find(n):
+      if n < 0:
+        return 
+      if n == 0:
+        yield solution
+      
+      solution.append(1)
+      recursive_find(n-1)
+      solution.pop()
+
+      solution.append(2)
+      recursive_find(n-2)
+      solution.pop()
+    
+    return recursive_find(n)
+    """
+    if n < 0:
+      return 
+    if n == 0:
+      yield []
+
+    for step in [1, 2]:
+      for solution in stair_ways(n - step):
+        yield [step] + solution
+
 
 
 def yield_paths(t, value):
@@ -88,11 +139,18 @@ def yield_paths(t, value):
     >>> sorted(list(path_to_2))
     [[0, 2], [0, 2, 1, 2]]
     """
+    """
     if label(t) == value:
         yield ____
     for b in branches(t):
         for ____ in ____:
             yield ____
+    """
+    if label(t) == value:
+        yield [value]
+    for b in branches(t):
+        for path in yield_paths(b, value):
+            yield [label(t)] + path
 
 
 
